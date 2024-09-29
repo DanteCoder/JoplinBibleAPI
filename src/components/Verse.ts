@@ -1,5 +1,12 @@
 import { cssObj2String } from '../utils/cssObj2String';
 
+interface Props {
+  text: string;
+  number: number;
+  displayNumber: boolean;
+  style: any;
+}
+
 /**
  * Creates the html for a verse
  * @param props
@@ -14,11 +21,4 @@ export default function Verse(props: Props) {
   html.innerHTML += text;
 
   return html.outerHTML;
-}
-
-interface Props {
-  text: string;
-  number: number;
-  displayNumber: boolean;
-  style: any;
 }

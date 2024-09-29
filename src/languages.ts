@@ -1,5 +1,3 @@
-import { BibleIndex } from './interfaces/bibleIndex';
-
 export const bibleIndexFull: BibleIndex = {
   en: {
     book: 'Book',

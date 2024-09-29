@@ -1,14 +1,19 @@
-import { BibleLanguage } from '../interfaces/bibleIndex';
-import { PluginConfig } from '../interfaces/config';
-import { OsisBible } from '../interfaces/osisBible';
-import { ParsedEntity } from '../interfaces/parseResult';
+import { bibleIndexFull } from '../languages';
+import type { ParsedEntity } from '../markdownPlugin/tokenParser';
 import { cssObj2String } from '../utils/cssObj2String';
 import { parseQuote } from '../utils/parseQuote';
-import { bibleIndexFull } from '../languages';
-import ChapterTitle from './ChapterTitle';
-import ParallelVerses from './ParallelVerses';
 import BookName from './BookTitle';
+import ChapterTitle from './ChapterTitle';
 import FullCitation from './FullCitation';
+import ParallelVerses from './ParallelVerses';
+
+interface Props {
+  bibleIndex: BibleLanguage;
+  bibleInfo: any;
+  parsedEntity: ParsedEntity;
+  osisBibles: OsisBible[];
+  pluginConfig: PluginConfig;
+}
 
 /**
  * Creates the html for parallel bible versions
@@ -95,12 +100,4 @@ export default function ParallelBlock(props: Props) {
   }
 
   return html.outerHTML;
-}
-
-interface Props {
-  bibleIndex: BibleLanguage;
-  bibleInfo: any;
-  parsedEntity: ParsedEntity;
-  osisBibles: Array<OsisBible>;
-  pluginConfig: PluginConfig;
 }

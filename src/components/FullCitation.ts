@@ -1,5 +1,12 @@
 import { cssObj2String } from '../utils/cssObj2String';
 
+interface Props {
+  style: any;
+  citation: string;
+  osisIDWork: string;
+  displayOsisIDWork: boolean;
+}
+
 /**
  * Creates the html for a full citation
  * @param props
@@ -15,11 +22,4 @@ export default function FullCitation(props: Props) {
   if (displayOsisIDWork) html.innerHTML += `<b> (${osisIDWork})<b>`;
 
   return html.outerHTML;
-}
-
-interface Props {
-  style: any;
-  citation: string;
-  osisIDWork: string;
-  displayOsisIDWork: boolean;
 }

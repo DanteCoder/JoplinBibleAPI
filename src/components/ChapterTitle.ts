@@ -1,5 +1,11 @@
 import { cssObj2String } from '../utils/cssObj2String';
 
+interface Props {
+  number: number;
+  style: any;
+  text: string;
+}
+
 /**
  * Creates the html for the Chapter title
  * @param props
@@ -13,10 +19,4 @@ export default function ChapterTitle(props: Props) {
   html.innerHTML = `${text} ${number}`;
 
   return html.outerHTML;
-}
-
-interface Props {
-  number: number;
-  style: any;
-  text: string;
 }

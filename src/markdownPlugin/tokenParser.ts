@@ -1,12 +1,26 @@
-import { OsisObject } from './interfaces/osisObject';
-import { EntityOptions, ParsedEntity, ParseResult } from './interfaces/parseResult';
+interface ParseResult {
+  type: 'entities' | 'error' | 'help' | 'index';
+  errorMessage?: string;
+  entities?: ParsedEntity[];
+  bookId?: string;
+}
+
+export interface ParsedEntity {
+  versions: string[];
+  osisObjects: any[];
+  options?: EntityOptions;
+}
+
+interface EntityOptions {
+  parallel?: boolean;
+}
 
 const versionKeyword = /^version\s"([^"]+)"$/;
 const versionsKeyword = /^versions\s("[^"]+"(?:,\s?"[^"]+")*)(?: (par))?$/;
 const helpKeyword = /^help$/;
 const indexKeyword = /^index(?: ([^\s]+))?$/;
 const emptyLine = /^\s*$/;
-const citationRegExp = /^\(([^\(\)]+)\)$/;
+const citationRegExp = /^\(([^()]+)\)$/;
 
 /**
  * Parses a block of bible code into groups of ParsedEntities
@@ -17,7 +31,7 @@ const citationRegExp = /^\(([^\(\)]+)\)$/;
  * @param availableVersions
  * @returns An object containing the parsed entities
  */
-export default function parser(tokenContent: string, bcvParser: any, availableVersions: Array<string>): ParseResult {
+export const tokenParser = (tokenContent: string, bcvParser: any, availableVersions: string[]): ParseResult => {
   const lines = tokenContent.split('\n');
   let parseResult: ParseResult = {
     type: 'entities',
@@ -51,7 +65,7 @@ export default function parser(tokenContent: string, bcvParser: any, availableVe
       }
 
       const bcvParsedObject: OsisObject = bcvParser.parse(match[1]).parsed_entities()[0];
-      parseResult.entities[parseResult.entities.length - 1].osisObjects.push(bcvParsedObject);
+      parseResult.entities?.[parseResult.entities.length - 1].osisObjects.push(bcvParsedObject);
       continue;
     }
 
@@ -66,7 +80,7 @@ export default function parser(tokenContent: string, bcvParser: any, availableVe
       }
 
       // Push a new entity
-      const pushResult = pushNewEntity(parseResult.entities, [versionMatchResult.version]);
+      const pushResult = pushNewEntity(parseResult.entities ?? [], [versionMatchResult.version ?? 'default']);
       if (pushResult.type === 'error') {
         errorMessage = pushResult.errorMessage;
         break;
@@ -79,7 +93,7 @@ export default function parser(tokenContent: string, bcvParser: any, availableVe
     match = line.match(versionsKeyword);
     if (match) {
       // Extract the versions
-      const extractedVersions = [];
+      const extractedVersions: string[] = [];
       const _versions: Array<string> = match[1].split(',');
       for (const _version of _versions) {
         const versionMatchResult = extractVersion(_version.replace(/(?:^\s")+|"+/g, ''), availableVersions);
@@ -89,8 +103,8 @@ export default function parser(tokenContent: string, bcvParser: any, availableVe
         }
 
         // Push the version to extractedVersions if it's not already in
-        if (extractedVersions.includes(versionMatchResult.version)) continue;
-        extractedVersions.push(versionMatchResult.version);
+        if (extractedVersions.includes(versionMatchResult.version ?? 'default')) continue;
+        extractedVersions.push(versionMatchResult.version ?? 'default');
       }
 
       // Check for the keyword "par"
@@ -98,7 +112,7 @@ export default function parser(tokenContent: string, bcvParser: any, availableVe
         parallel: match[2] ? true : false,
       };
 
-      const pushResult = pushNewEntity(parseResult.entities, extractedVersions, options);
+      const pushResult = pushNewEntity(parseResult.entities ?? [], extractedVersions, options);
       if (pushResult.type === 'error') {
         errorMessage = pushResult.errorMessage;
         break;
@@ -136,7 +150,7 @@ export default function parser(tokenContent: string, bcvParser: any, availableVe
     break;
   }
 
-  if (parseResult.entities[0].osisObjects.length === 0 && errorMessage === null) {
+  if (parseResult.entities?.[0].osisObjects.length === 0 && errorMessage === null) {
     errorMessage = 'No citation specified. Try writing "(Genesis 1:1)"';
   }
 
@@ -148,7 +162,7 @@ export default function parser(tokenContent: string, bcvParser: any, availableVe
   }
 
   return parseResult;
-}
+};
 
 /**
  * Parses a version from a string comparing it with the available versions

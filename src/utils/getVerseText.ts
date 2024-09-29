@@ -1,6 +1,3 @@
-import { OsisBible } from '../interfaces/osisBible';
-import { BCV } from '../interfaces/osisObject';
-
 /**
  * Extracts a verse from an OSIS Bible
  * @param osisBible
@@ -8,7 +5,8 @@ import { BCV } from '../interfaces/osisObject';
  * @returns string verse
  */
 export function getVerseText(osisBible: OsisBible, bcv: BCV): string {
-  const book = osisBible.div.find((book) => book.$.osisID === bcv.b);
+  const book = osisBible.div.find((book) => book.$.osisID === bcv.b)!;
+
   const chapter = book.chapter[bcv.c - 1];
   const verse = chapter.verse[bcv.v - 1];
   let verseText = verse._;

@@ -1,7 +1,4 @@
 import { osis2Cite } from './osis2Cite';
-import { BibleLanguage } from 'src/interfaces/bibleIndex';
-import { ParsedQuote } from 'src/interfaces/parsedQuote';
-import { BCV, OsisObject } from 'src/interfaces/osisObject';
 
 /**
  * Parses a bible quote like "Genesis 1:1" into a JS object.
@@ -11,31 +8,31 @@ import { BCV, OsisObject } from 'src/interfaces/osisObject';
  * @returns The parsed quote organized in books, chapters and verses
  */
 export function parseQuote(osisObject: OsisObject, bibleIndex: BibleLanguage, bibleInfo: any): ParsedQuote {
-  let parsedQuote: ParsedQuote = { books: [], cite: '' };
+  const parsedQuote: ParsedQuote = { books: [], cite: '' };
 
-  let startBcv = null;
-  let endBcv = null;
+  let startBcv: BCV | null = null;
+  let endBcv: BCV | null = null;
 
   // Normalized citation
   parsedQuote.cite = osis2Cite(osisObject, bibleIndex, bibleInfo);
 
-  for (let entity of osisObject.entities) {
+  for (const entity of osisObject.entities) {
     startBcv = entity.start;
     endBcv = entity.end;
 
-    let startBook = bibleInfo.books.indexOf(startBcv.b) + 1;
-    let endBook = bibleInfo.books.indexOf(endBcv.b) + 1;
+    const startBook = bibleInfo.books.indexOf(startBcv.b) + 1;
+    const endBook = bibleInfo.books.indexOf(endBcv.b) + 1;
 
     for (let book = startBook; book <= endBook; book++) {
-      let bookId = bibleInfo.books[book - 1];
+      const bookId = bibleInfo.books[book - 1];
       // The number of books in the chapter
-      let bookChapterNumbers = bibleInfo.chapters[bookId].length;
+      const bookChapterNumbers = bibleInfo.chapters[bookId].length;
 
       if (startBook === endBook) {
         //If there is only one book in the citation
         for (let chapter = startBcv.c; chapter <= endBcv.c; chapter++) {
           // The number of verses in the chapter
-          let chaperVerseNumber = bibleInfo.chapters[bookId][chapter - 1];
+          const chaperVerseNumber = bibleInfo.chapters[bookId][chapter - 1];
 
           if (startBcv.c === endBcv.c) {
             //If there is only one chapter in the citation
@@ -62,7 +59,7 @@ export function parseQuote(osisObject: OsisObject, bibleIndex: BibleLanguage, bi
       } else if (book === startBook) {
         // If book is the first book of the citation
         for (let chapter = startBcv.c; chapter <= bookChapterNumbers; chapter++) {
-          let c_v_num = bibleInfo.chapters[bookId][chapter - 1];
+          const c_v_num = bibleInfo.chapters[bookId][chapter - 1];
 
           if (chapter === startBcv.c) {
             //If chapter is the first chapter of the citation
@@ -80,7 +77,7 @@ export function parseQuote(osisObject: OsisObject, bibleIndex: BibleLanguage, bi
         // If book is the last book of the citation
         for (let chapter = 1; chapter <= endBcv.c; chapter++) {
           // The number of verses in the chapter
-          let chapterVerseNumber = bibleInfo.chapters[bookId][chapter - 1];
+          const chapterVerseNumber = bibleInfo.chapters[bookId][chapter - 1];
 
           if (chapter === endBcv.c) {
             //If chapter is the last chapter of the citation
@@ -98,7 +95,7 @@ export function parseQuote(osisObject: OsisObject, bibleIndex: BibleLanguage, bi
         // If book is any book in between the first and last books of the citation
         for (let chapter = 1; chapter <= bookChapterNumbers; chapter++) {
           // The number of verses in the chapter
-          let chapterVerseNumber = bibleInfo.chapters[bookId][chapter - 1];
+          const chapterVerseNumber = bibleInfo.chapters[bookId][chapter - 1];
 
           for (let verse = 1; verse <= chapterVerseNumber; verse++) {
             push2ParsedQuote(bookId + '.' + chapter + '.' + verse);
@@ -121,8 +118,8 @@ export function parseQuote(osisObject: OsisObject, bibleIndex: BibleLanguage, bi
       c: parseInt(split[1]),
       v: parseInt(split[2]),
     };
-    let lastBookIndex: number = null;
-    let lastChapterIndex: number = null;
+    let lastBookIndex: number | null = null;
+    let lastChapterIndex: number | null = null;
 
     const bookNumber = bibleInfo.order[osisParts.b];
     const bookName = bibleIndex.books[bookNumber - 1];

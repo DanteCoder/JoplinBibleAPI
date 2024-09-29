@@ -1,5 +1,14 @@
 import FullCitation from './FullCitation';
 
+interface Props {
+  books: string[];
+  citation: string;
+  displayFullCitation: boolean;
+  displayOsisIDWork: boolean;
+  osisIDWork: string;
+  style: any;
+}
+
 /**
  * Creates the html for a citation
  * @param props
@@ -18,13 +27,4 @@ export default function Citation(props: Props) {
   }
 
   return html.outerHTML;
-}
-
-interface Props {
-  books: Array<string>;
-  citation: string;
-  displayFullCitation: boolean;
-  displayOsisIDWork: boolean;
-  osisIDWork: string;
-  style: any;
 }

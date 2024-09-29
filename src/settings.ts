@@ -1,110 +1,123 @@
-import joplin from 'api';
-import { SettingItem, SettingItemType } from 'api/types';
+import joplin from '../api';
+import { type SettingItem, SettingItemType } from '../api/types';
 
-export namespace Settings {
-  export const settings: Record<string, SettingItem> = {
-    language: {
-      value: 'en',
-      type: SettingItemType.String,
-      isEnum: true,
-      section: 'bibleQuoteSection',
-      public: true,
-      label: 'Language',
-      description: 'The language to display for book names and to parse citations.',
-      options: {
-        en: 'English',
-        es: 'Spanish',
-        fr: 'Français',
-        zh: 'Chinese',
-      },
-    },
-    biblePath: {
-      value: '',
-      type: SettingItemType.String,
-      section: 'bibleQuoteSection',
-      public: true,
-      label: 'Path to the default OSIS Bible file',
-      description: 'e.g. C:/My/Path/To/Default-OSIS-Bible.xml',
-    },
-    biblesPath: {
-      value: '',
-      type: SettingItemType.String,
-      section: 'bibleQuoteSection',
-      public: true,
-      label: 'Path to a folder containing OSIS bibles',
-      description: 'If you want to select from multiple versions: e.g. C:/My/Path/To/MyFolder',
-    },
-    verseFontSize: {
-      value: 16,
-      minimum: 10,
-      maximum: 30,
-      type: SettingItemType.Int,
-      section: 'bibleQuoteSection',
-      public: true,
-      label: 'Verse font size',
-    },
-    verseAlignment: {
-      value: 'justify',
-      type: SettingItemType.String,
-      isEnum: true,
-      section: 'bibleQuoteSection',
-      public: true,
-      label: 'Verse alignment',
-      options: {
-        center: 'Center',
-        left: 'Left',
-        right: 'Right',
-        justify: 'Justify',
-      },
-    },
-    bookAlignment: {
-      value: 'center',
-      type: SettingItemType.String,
-      isEnum: true,
-      section: 'bibleQuoteSection',
-      public: true,
-      label: 'Bible book name alignment',
-      options: {
-        center: 'Center',
-        left: 'Left',
-        right: 'Right',
-        justify: 'Justify',
-      },
-    },
-    chapterAlignment: {
-      value: 'left',
-      type: SettingItemType.String,
-      isEnum: true,
-      section: 'bibleQuoteSection',
-      public: true,
-      label: 'Chapter number alignment',
-      options: {
-        center: 'Center',
-        left: 'Left',
-        right: 'Right',
-        justify: 'Justify',
-      },
-    },
-    chapterPadding: {
-      value: 10,
-      minimum: 0,
-      maximum: 100,
-      type: SettingItemType.Int,
-      section: 'bibleQuoteSection',
-      public: true,
-      label: 'Chapter side padding',
-      description: 'Chapter side padding in pixels.',
-    },
-  };
+/**
+ * The default plugin configuration.
+ */
+export const defaultConfig: PluginConfig = {
+  language: 'en',
+  biblesNote: '',
+  defaultVersion: '',
+  verseFontSize: 16,
+  verseAlignment: 'justify',
+  bookAlignment: 'center',
+  chapterAlignment: 'left',
+  chapterPadding: 10,
+};
 
-  export const pathSettings = ['biblePath', 'biblesPath'];
+/**
+ * The available language options.
+ */
+const languageOptions: Record<keyof BibleIndex, string> = {
+  en: 'English',
+  es: 'Spanish',
+  fr: 'Français',
+  zh: 'Chinese',
+};
 
-  export async function register() {
-    await joplin.settings.registerSection('bibleQuoteSection', {
-      iconName: 'fas fa-book',
-      label: 'Bible Quote',
-    });
+/**
+ * The available text alignment options.
+ */
+const alignmentOptions: Record<TextAlignment, string> = {
+  center: 'Center',
+  left: 'Left',
+  right: 'Right',
+  justify: 'Justify',
+};
 
-    await joplin.settings.registerSettings(settings);
-  }
+const settings: Record<keyof PluginConfig, SettingItem> = {
+  language: {
+    value: defaultConfig.language,
+    type: SettingItemType.String,
+    isEnum: true,
+    section: 'bibleQuoteSection',
+    public: true,
+    label: 'Language',
+    description: 'The language to display for book names and to parse citations.',
+    options: languageOptions,
+  },
+  biblesNote: {
+    value: defaultConfig.biblesNote,
+    type: SettingItemType.String,
+    section: 'bibleQuoteSection',
+    public: true,
+    label: 'Bibles Note',
+    description: 'The name of the note where the Bibles are stored.',
+  },
+  defaultVersion: {
+    value: defaultConfig.defaultVersion,
+    type: SettingItemType.String,
+    section: 'bibleQuoteSection',
+    public: true,
+    label: 'Default Bible version',
+    description: 'The default Bible version to use. If not set, the first found version will be used.',
+  },
+  verseFontSize: {
+    value: defaultConfig.verseFontSize,
+    minimum: 10,
+    maximum: 30,
+    type: SettingItemType.Int,
+    section: 'bibleQuoteSection',
+    public: true,
+    label: 'Verse font size',
+  },
+  verseAlignment: {
+    value: defaultConfig.verseAlignment,
+    type: SettingItemType.String,
+    isEnum: true,
+    section: 'bibleQuoteSection',
+    public: true,
+    label: 'Verse alignment',
+    options: alignmentOptions,
+  },
+  bookAlignment: {
+    value: defaultConfig.bookAlignment,
+    type: SettingItemType.String,
+    isEnum: true,
+    section: 'bibleQuoteSection',
+    public: true,
+    label: 'Bible book name alignment',
+    options: alignmentOptions,
+  },
+  chapterAlignment: {
+    value: defaultConfig.chapterAlignment,
+    type: SettingItemType.String,
+    isEnum: true,
+    section: 'bibleQuoteSection',
+    public: true,
+    label: 'Chapter number alignment',
+    options: alignmentOptions,
+  },
+  chapterPadding: {
+    value: defaultConfig.chapterPadding,
+    minimum: 0,
+    maximum: 100,
+    type: SettingItemType.Int,
+    section: 'bibleQuoteSection',
+    public: true,
+    label: 'Chapter side padding',
+    description: 'Chapter side padding in pixels.',
+  },
+};
+
+/**
+ * Registers the plugin settings.
+ */
+export async function register() {
+  await joplin.settings.registerSection('bibleQuoteSection', {
+    iconName: 'fas fa-book',
+    label: 'Bible Quote',
+  });
+
+  await joplin.settings.registerSettings(settings);
 }

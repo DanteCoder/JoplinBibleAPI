@@ -1,5 +1,10 @@
-import { BibleLanguage } from '../interfaces/bibleIndex';
 import { cssObj2String } from '../utils/cssObj2String';
+
+interface Props {
+  bibleIndex: BibleLanguage;
+  bibleInfo: any;
+  bookId?: string;
+}
 
 export default function BibleIndex(props: Props) {
   const { bibleIndex, bibleInfo, bookId } = props;
@@ -25,10 +30,10 @@ export default function BibleIndex(props: Props) {
     html.innerHTML += `<p>${bibleIndex.chapter}</p>`;
     html.innerHTML += `<p>${bibleIndex.verses}</p>`;
 
-    bibleInfo.chapters[bookId].forEach((verses, i) => {
+    (bibleInfo.chapters[bookId] as string[]).forEach((verses, i) => {
       let p = document.createElement('p');
       p.setAttribute('style', cssObj2String({ margin: '0px' }));
-      p.innerHTML = i + 1;
+      p.innerHTML = `${i + 1}`;
       html.appendChild(p);
 
       p = document.createElement('p');
@@ -65,10 +70,4 @@ export default function BibleIndex(props: Props) {
   }
 
   return html.outerHTML;
-}
-
-interface Props {
-  bibleIndex: BibleLanguage;
-  bibleInfo: any;
-  bookId?: string;
 }

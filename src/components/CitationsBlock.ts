@@ -1,16 +1,21 @@
-import { PluginConfig } from '../interfaces/config';
-import { OsisBible } from '../interfaces/osisBible';
-import { ParsedQuote } from '../interfaces/parsedQuote';
+import { bibleIndexFull } from '../languages';
+import type { ParsedEntity } from '../markdownPlugin/tokenParser';
 import { cssObj2String } from '../utils/cssObj2String';
 import { getVerseText } from '../utils/getVerseText';
-import { bibleIndexFull } from '../languages';
+import { parseQuote } from '../utils/parseQuote';
 import Book from './Book';
 import Chapter from './Chapter';
 import Citation from './Citation';
 import Verse from './Verse';
-import { ParsedEntity } from '../interfaces/parseResult';
-import { parseQuote } from '../utils/parseQuote';
-import { BibleLanguage } from '../interfaces/bibleIndex';
+
+interface Props {
+  bibleIndex: BibleLanguage;
+  bibleInfo: any;
+  entity: ParsedEntity;
+  defaultOsisBible: OsisBible;
+  osisBibles: OsisBible[];
+  pluginConfig: PluginConfig;
+}
 
 /**
  * Creates the html for a list of citations
@@ -38,7 +43,7 @@ export default function CitationsBlock(props: Props) {
     if (version === 'default') {
       osisBible = defaultOsisBible;
     } else {
-      osisBible = osisBibles.find((bible) => bible.$.osisIDWork === version);
+      osisBible = osisBibles.find((bible) => bible.$.osisIDWork === version)!;
     }
 
     for (const fullQuote of parsedQuotes) {
@@ -47,7 +52,7 @@ export default function CitationsBlock(props: Props) {
         const chaptersHTML = [];
         for (const chapter of book.chapters) {
           const versesHTML = [];
-          for (let verse of chapter.verses) {
+          for (const verse of chapter.verses) {
             const verseText = getVerseText(osisBible, { b: book.id, c: chapter.id, v: verse });
             versesHTML.push(
               Verse({
@@ -120,13 +125,4 @@ export default function CitationsBlock(props: Props) {
   }
 
   return html.outerHTML;
-}
-
-interface Props {
-  bibleIndex: BibleLanguage;
-  bibleInfo: any;
-  entity: ParsedEntity;
-  defaultOsisBible: OsisBible;
-  osisBibles: Array<OsisBible>;
-  pluginConfig: PluginConfig;
 }

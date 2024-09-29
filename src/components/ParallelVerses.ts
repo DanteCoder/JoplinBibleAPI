@@ -1,8 +1,14 @@
-import { OsisBible } from '../interfaces/osisBible';
-import { Chapter } from '../interfaces/parsedQuote';
 import { cssObj2String } from '../utils/cssObj2String';
 import { getVerseText } from '../utils/getVerseText';
 import Verse from './Verse';
+
+interface Props {
+  bookId: string;
+  chapter: ParsedChapter;
+  versions: string[];
+  osisBibles: OsisBible[];
+  style: any;
+}
 
 /**
  * Creates the html for parallel verses
@@ -24,22 +30,15 @@ export default function ParallelVerses(props: Props) {
 
   for (const verse of chapter.verses) {
     for (const version of versions) {
-      const verseText = getVerseText(
-        osisBibles.find((bible) => bible.$.osisIDWork === version),
-        { b: bookId, c: chapter.id, v: verse }
-      );
+      const verseText = getVerseText(osisBibles.find((bible) => bible.$.osisIDWork === version)!, {
+        b: bookId,
+        c: chapter.id,
+        v: verse,
+      });
 
       html.innerHTML += Verse({ displayNumber: true, number: verse, text: verseText, style });
     }
   }
 
   return html.outerHTML;
-}
-
-interface Props {
-  bookId: string;
-  chapter: Chapter;
-  versions: Array<string>;
-  osisBibles: Array<OsisBible>;
-  style: any;
 }

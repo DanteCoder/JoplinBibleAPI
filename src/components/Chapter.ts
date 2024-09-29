@@ -1,5 +1,13 @@
 import ChapterTitle from './ChapterTitle';
 
+interface Props {
+  verses: string[];
+  number: number;
+  text: string;
+  displayChapter: boolean;
+  style: any;
+}
+
 /**
  * Creates the html for a chapter
  * @param props
@@ -22,12 +30,4 @@ export default function Chapter(props: Props) {
   html.appendChild(versesDiv);
 
   return html.outerHTML;
-}
-
-interface Props {
-  verses: Array<string>;
-  number: number;
-  text: string;
-  displayChapter: boolean;
-  style: any;
 }

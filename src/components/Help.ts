@@ -1,6 +1,10 @@
 import { helpLanguages } from '../languages';
 import { cssObj2String } from '../utils/cssObj2String';
 
+interface Props {
+  language: keyof BibleIndex;
+}
+
 /**
  * Creates the html for help
  * @param error
@@ -18,10 +22,9 @@ export default function Help(props: Props) {
     })
   );
 
-  html.innerHTML = (helpLanguages[language] ?? helpLanguages.en).replace(/\n/g, '<br>');
-  return html.outerHTML;
-}
+  const helpLanguage =
+    language in helpLanguages ? helpLanguages[language as keyof typeof helpLanguages] : helpLanguages.en;
 
-interface Props {
-  language: string;
+  html.innerHTML = helpLanguage.replace(/\n/g, '<br>');
+  return html.outerHTML;
 }

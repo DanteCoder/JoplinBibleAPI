@@ -1,6 +1,3 @@
-import { BibleLanguage } from 'src/interfaces/bibleIndex';
-import { OsisObject } from 'src/interfaces/osisObject';
-
 /**
  * Gets the bcv parsed entities object andcreates a normalized citation text.
  * @param osisObject https://github.com/openbibleinfo/Bible-Passage-Reference-Parser#parsed_entities
@@ -24,7 +21,7 @@ export function osis2Cite(osisObject: OsisObject, bibleIndex: BibleLanguage, bib
   let lastBook = null;
   let lastChap = null;
 
-  for (let entity of osisObject.entities) {
+  for (const entity of osisObject.entities) {
     if (entity.type === 'bcv') {
       if (entity.start.b !== lastBook) {
         const bookName = bibleIndex.books[bibleInfo.books.indexOf(entity.start.b)];

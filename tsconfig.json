@@ -5,7 +5,7 @@
 		"target": "ES2015",
 		"jsx": "react",
 		"strict": true,
+		"typeRoots": ["./src/index.d.ts"],
 		"allowJs": true,
-		"baseUrl": "."
 	}
 }

@@ -1,10 +1,16 @@
-import { BibleLanguage } from '../interfaces/bibleIndex';
-import { PluginConfig } from '../interfaces/config';
-import { OsisBible } from '../interfaces/osisBible';
-import { ParsedEntity } from '../interfaces/parseResult';
+import type { ParsedEntity } from '../markdownPlugin/tokenParser';
 import { cssObj2String } from '../utils/cssObj2String';
 import CitationsBlock from './CitationsBlock';
 import ParallelBlock from './ParallelBlock';
+
+interface Props {
+  bibleIndex: BibleLanguage;
+  bibleInfo: any;
+  defaultOsisBible: OsisBible;
+  osisBibles: OsisBible[];
+  parsedEntities: ParsedEntity[];
+  pluginConfig: PluginConfig;
+}
 
 /**
  * Creates the html for the render
@@ -51,13 +57,4 @@ export default function Main(props: Props) {
   }
 
   return html.outerHTML;
-}
-
-interface Props {
-  bibleIndex: BibleLanguage;
-  bibleInfo: any;
-  defaultOsisBible: OsisBible;
-  osisBibles: Array<OsisBible>;
-  parsedEntities: Array<ParsedEntity>;
-  pluginConfig: PluginConfig;
 }

@@ -1,5 +1,10 @@
 import { cssObj2String } from '../utils/cssObj2String';
 
+interface Props {
+  name: string;
+  style: any;
+}
+
 /**
  * Creates the html for a book title
  * @param props
@@ -13,9 +18,4 @@ export default function BookName(props: Props) {
   html.innerHTML = `<b>${name}<b>`;
 
   return html.outerHTML;
-}
-
-interface Props {
-  name: string;
-  style: any;
 }

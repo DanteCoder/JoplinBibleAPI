@@ -1,5 +1,12 @@
 import BookName from './BookTitle';
 
+interface Props {
+  chapters: string[];
+  name: string;
+  displayName: boolean;
+  style: any;
+}
+
 /**
  * Creates the html for a book
  * @param props
@@ -18,11 +25,4 @@ export default function Book(props: Props) {
   }
 
   return html.outerHTML;
-}
-
-interface Props {
-  chapters: Array<string>;
-  name: string;
-  displayName: boolean;
-  style: any;
 }
