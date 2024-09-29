@@ -1,9 +1,10 @@
 {
 	"compilerOptions": {
 		"outDir": "./dist/",
-		"module": "commonjs",
-		"target": "es2015",
+		"module": "NodeNext",
+		"target": "ES2015",
 		"jsx": "react",
+		"strict": true,
 		"allowJs": true,
 		"baseUrl": "."
 	}
