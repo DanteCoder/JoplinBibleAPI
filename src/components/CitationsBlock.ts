@@ -1,8 +1,8 @@
 import { bibleIndexFull } from '../languages';
-import type { ParsedEntity } from '../markdownPlugin/tokenParser';
 import { cssObj2String } from '../utils/cssObj2String';
 import { getVerseText } from '../utils/getVerseText';
 import { parseQuote } from '../utils/parseQuote';
+import type { ParsedEntity } from '../utils/tokenParser';
 import Book from './Book';
 import Chapter from './Chapter';
 import Citation from './Citation';

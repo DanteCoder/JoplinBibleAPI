@@ -1,7 +1,7 @@
 import { bibleIndexFull } from '../languages';
-import type { ParsedEntity } from '../markdownPlugin/tokenParser';
 import { cssObj2String } from '../utils/cssObj2String';
 import { parseQuote } from '../utils/parseQuote';
+import type { ParsedEntity } from '../utils/tokenParser';
 import BookName from './BookTitle';
 import ChapterTitle from './ChapterTitle';
 import FullCitation from './FullCitation';

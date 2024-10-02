@@ -1,5 +1,6 @@
 {
 	"extraScripts": [
-		"markdownPlugin/plugin.ts"
+		"markdownPlugin/plugin.ts",
+		"markdownPlugin/asyncRenderer.ts"
 	]
 }

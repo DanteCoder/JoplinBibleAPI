@@ -163,6 +163,19 @@ interface ParsedChapter {
 }
 
 /**
+ * The message types from the markdown plugin.
+ */
+type MdPostMessageType = 'parseBlock';
+
+/**
+ * The message sent to the main plugin from the markdown plugin.
+ */
+interface MdPostMessage {
+  type: MdPostMessageType;
+  content: string;
+}
+
+/**
  * Utility type to get the resolved type of a promise
  */
 type PromiseResolvedType<T> = T extends Promise<infer R> ? R : never;

@@ -1,14 +1,9 @@
 import type { PluginSimple } from 'markdown-it';
-import BibleIndex from '../components/BibleIndex';
-import ErrorManager from '../components/ErrorManager';
-import Help from '../components/Help';
-import Main from '../components/Main';
-import { Parser } from './parser';
-
-const pluginParser = new Parser();
+import { CONTAINER_CLASS, CONTENT_CLASS, FENCE_INFO, VIEW_CLASS } from '../constants';
 
 /**
  * The markdown-it plugin.
+ * @param markdownIt The markdown-it instance
  */
 const plugin: PluginSimple = (markdownIt) => {
   const defaultRender =
@@ -17,60 +12,40 @@ const plugin: PluginSimple = (markdownIt) => {
   markdownIt.renderer.rules.fence = (tokens, idx, options, env, self) => {
     const token = tokens[idx];
 
-    // The token after the "```"
-    if (token.info !== 'bible') {
+    if (token.info !== FENCE_INFO) {
       return defaultRender(tokens, idx, options, env, self);
     }
 
-    if (!pluginParser.initialized) {
-      return ErrorManager('Plugin is initializing. Try again in a few seconds.');
-    }
+    const metadata = document.createElement('pre');
+    metadata.classList.add('joplin-source');
+    metadata.classList.add(CONTENT_CLASS);
+    metadata.setAttribute('data-joplin-language', FENCE_INFO);
+    metadata.setAttribute('data-joplin-source-open', '```' + FENCE_INFO + '\n');
+    metadata.setAttribute('data-joplin-source-close', '```');
+    metadata.innerHTML = markdownIt.utils.escapeHtml(token.content);
 
-    if (pluginParser.mainPluginError) {
-      return ErrorManager(pluginParser.mainPluginError);
-    }
+    const view = document.createElement('div');
+    view.classList.add(VIEW_CLASS);
 
-    if (!pluginParser.osisBibles.length) {
-      return ErrorManager('No Bibles available');
-    }
+    const viewPlaceholder = document.createElement('pre');
+    viewPlaceholder.innerHTML = metadata.innerHTML;
 
-    const parseResult = pluginParser.parse(token.content);
+    view.appendChild(viewPlaceholder);
 
-    if (parseResult.type === 'error') {
-      return ErrorManager(parseResult.errorMessage ?? 'Something went wrong');
-    }
+    const container = document.createElement('div');
+    container.classList.add('joplin-editable');
+    container.classList.add(CONTAINER_CLASS);
 
-    if (parseResult.type === 'help') {
-      return Help({
-        language: pluginParser.pluginConfig.language,
-      });
-    }
+    container.appendChild(metadata);
+    container.appendChild(view);
 
-    // Handle "index" command
-    if (parseResult.type === 'index') {
-      return BibleIndex({
-        bibleIndex: pluginParser.bibleIndex,
-        bibleInfo: pluginParser.bcvParser.translation_info(),
-        bookId: parseResult.bookId ?? undefined,
-      });
-    }
-
-    // Create the html to render
-    const html = Main({
-      bibleIndex: pluginParser.bibleIndex,
-      bibleInfo: pluginParser.bcvParser.translation_info(),
-      defaultOsisBible: pluginParser.osisBibles[0],
-      osisBibles: pluginParser.osisBibles,
-      parsedEntities: parseResult.entities ?? [],
-      pluginConfig: pluginParser.pluginConfig,
-    });
-
-    return html;
+    return container.outerHTML;
   };
 };
 
 export default () => {
   return {
     plugin,
+    assets: () => [{ name: 'asyncRenderer.js' }],
   };
 };

@@ -1,5 +1,5 @@
-import type { ParsedEntity } from '../markdownPlugin/tokenParser';
 import { cssObj2String } from '../utils/cssObj2String';
+import type { ParsedEntity } from '../utils/tokenParser';
 import CitationsBlock from './CitationsBlock';
 import ParallelBlock from './ParallelBlock';
 
