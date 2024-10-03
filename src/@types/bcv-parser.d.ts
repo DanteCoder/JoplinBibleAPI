@@ -36,33 +36,3 @@ interface BCV {
   v: number;
   type?: 'bcv' | 'bc' | 'cv' | 'integer' | 'range';
 }
-
-interface OsisBible {
-  $: {
-    osisIDWork: string;
-  };
-  div: OsisBook[];
-}
-
-interface OsisBook {
-  $: {
-    osisRefWork: string;
-    osisIDWork: string;
-    osisID: string;
-  };
-  chapter: OsisChapter[];
-}
-
-interface OsisChapter {
-  $: {
-    osisID: string;
-  };
-  verse: Verse[];
-}
-
-interface Verse {
-  $: {
-    osisID: string;
-  };
-  _: string;
-}

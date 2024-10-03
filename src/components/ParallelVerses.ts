@@ -6,7 +6,7 @@ interface Props {
   bookId: string;
   chapter: ParsedChapter;
   versions: string[];
-  osisBibles: OsisBible[];
+  osisBibles: ElementProxy[];
   style: any;
 }
 

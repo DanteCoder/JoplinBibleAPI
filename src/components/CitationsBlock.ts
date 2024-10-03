@@ -12,8 +12,8 @@ interface Props {
   bibleIndex: BibleLanguage;
   bibleInfo: any;
   entity: ParsedEntity;
-  defaultOsisBible: OsisBible;
-  osisBibles: OsisBible[];
+  defaultOsisBible: ElementProxy;
+  osisBibles: ElementProxy[];
   pluginConfig: PluginConfig;
 }
 
@@ -39,7 +39,7 @@ export default function CitationsBlock(props: Props) {
   }
 
   for (const version of entity.versions) {
-    let osisBible: OsisBible;
+    let osisBible: ElementProxy;
     if (version === 'default') {
       osisBible = defaultOsisBible;
     } else {

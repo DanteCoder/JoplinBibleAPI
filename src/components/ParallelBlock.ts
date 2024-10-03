@@ -11,7 +11,7 @@ interface Props {
   bibleIndex: BibleLanguage;
   bibleInfo: any;
   parsedEntity: ParsedEntity;
-  osisBibles: OsisBible[];
+  osisBibles: ElementProxy[];
   pluginConfig: PluginConfig;
 }
 

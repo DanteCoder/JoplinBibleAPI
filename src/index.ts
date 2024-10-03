@@ -240,8 +240,7 @@ const getBibleFiles = async (biblesNoteId: string) => {
 const openBibleFiles = async (bibleFiles: BibleFiles) => {
   const osisBibles = bibleFiles
     .map((bible) => {
-      const buffer = Buffer.from(bible.body);
-      return xmlBible2Js(buffer);
+      return xmlBible2Js(bible.body);
     })
     .filter((b) => b != null);
 

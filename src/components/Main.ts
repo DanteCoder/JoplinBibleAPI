@@ -6,8 +6,8 @@ import ParallelBlock from './ParallelBlock';
 interface Props {
   bibleIndex: BibleLanguage;
   bibleInfo: any;
-  defaultOsisBible: OsisBible;
-  osisBibles: OsisBible[];
+  defaultOsisBible: ElementProxy;
+  osisBibles: ElementProxy[];
   parsedEntities: ParsedEntity[];
   pluginConfig: PluginConfig;
 }
